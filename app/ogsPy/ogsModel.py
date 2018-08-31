@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, QAbstractItemModel, QFile, QIODevice, QModelIndex
 from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, QTreeView
 from PyQt5.QtXml import QDomDocument
-from PyQt5.QtXmlPatterns import QXmlSchema, QXmlSchemaValidator
+from PyQt5.QtXmlPatterns import QXmlSchema, QXmlSchemaValidator, QXmlQuery
 
 class OgsItem(object):
     def __init__(self, node, row, parent=None):
@@ -47,8 +47,8 @@ class OgsModel(QAbstractItemModel):
         schema_file.open(QIODevice.ReadOnly)
         project_schema = QXmlSchema()
         project_schema.load(schema_file)
-        self.namePool = project_schema.namePool()
-        print(self.namePool)
+        namePool = project_schema.namePool()
+        self.query = QXmlQuery(namePool)
 
     def columnCount(self, parent):
         return 4
@@ -70,9 +70,13 @@ class OgsModel(QAbstractItemModel):
             return node.nodeName()
 
         elif index.column() == 1:
-            value = node.nodeValue()
-            if value is None:
-                return ''
+            # Text based
+            if node.hasChildNodes() and node.firstChild().nodeType() == 3:
+                return node.firstChild().nodeValue()
+            else:
+                value = node.nodeValue()
+                if value is None:
+                    return ''
 
             return ' '.join(node.nodeValue().split('\n'))
 
@@ -148,16 +152,3 @@ class OgsModel(QAbstractItemModel):
             parentItem = parent.internalPointer()
 
         return parentItem.node().childNodes().count()
-
-def createProject(document):
-    # Read project schema xsd file
-    schema_file = QFile('OpenGeoSysProject.xsd')
-    schema_file.open(QIODevice.ReadOnly)
-    project_schema = QXmlSchema()
-    project_schema.load(schema_file)
-
-    if project_schema.isValid():
-        validator = QXmlSchemaValidator(project_schema)
-    else:
-        validator = None
-    return OrgModel(document, parent=0, validator=validator)

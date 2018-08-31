@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.uic import loadUi, loadUiType
 from PyQt5.QtXml import QDomDocument
 
-from ..ogsPy.ogsModel import OgsModel
+from ..ogsPy.ogsModel import OgsModel,OgsItem
 
 MainWindowUI, MainWindowBase = loadUiType('resources/views/MainWindow.ui')
 
@@ -16,10 +16,16 @@ class MainWindow(MainWindowBase, MainWindowUI):
     self.setupUi(self)
 
     self.projectPath = ""
+    self.selectedElement = None
     self.model = OgsModel(QDomDocument(), self)
     self.projectTree.setModel(self.model)
 
     self.actionOpen.triggered.connect(self.showOpenProjectDialog)
+    self.actionSelectElement.triggered.connect(self.selectElement)
+
+  def selectElement(self, element, **args):
+    selectedNodes = [idx.internalPointer().node() for idx in  self.projectTree.selectedIndexes()]
+    self.activeElementLabel.setText(selectedNodes[0].nodeName())
 
   def openProject(self, filePath):
     # Read File and parse XML
