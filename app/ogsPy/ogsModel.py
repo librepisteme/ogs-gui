@@ -42,6 +42,14 @@ class OgsModel(QAbstractItemModel):
         self.domDocument = document
         self.rootItem = OgsItem(self.domDocument, 0)
 
+        # Read project schema xsd file and create name pool
+        schema_file = QFile('OpenGeoSysProject.xsd')
+        schema_file.open(QIODevice.ReadOnly)
+        project_schema = QXmlSchema()
+        project_schema.load(schema_file)
+        self.namePool = project_schema.namePool()
+        print(self.namePool)
+
     def columnCount(self, parent):
         return 4
 
@@ -141,21 +149,15 @@ class OgsModel(QAbstractItemModel):
 
         return parentItem.node().childNodes().count()
 
+def createProject(document):
+    # Read project schema xsd file
+    schema_file = QFile('OpenGeoSysProject.xsd')
+    schema_file.open(QIODevice.ReadOnly)
+    project_schema = QXmlSchema()
+    project_schema.load(schema_file)
 
-class OgsProject(OgsModel):
-    def __init__(self, document_file):
-        # Read project schema xsd file
-        schema_file = QFile('OpenGeoSysProject.xsd')
-        schema_file.open(QIODevice.ReadOnly)
-        project_schema = QXmlSchema()
-        project_schema.load(schema_file)
-
-        # Validate project against official ogs schema
-        if(project_schema.isValid()):
-          validator = QXmlSchemaValidator(project_schema)
-
-          if (validator.validate(document)):
-              super(OgsModel, self).__init__(parent)
-              project_root = document.namedItem('OpenGeoSysProject') or document
-              self.dom_document = project_root
-              self.root_item = OgsItem(self.dom_document, 0)
+    if project_schema.isValid():
+        validator = QXmlSchemaValidator(project_schema)
+    else:
+        validator = None
+    return OrgModel(document, parent=0, validator=validator)
