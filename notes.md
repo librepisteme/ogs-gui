@@ -1,7 +1,8 @@
-# Simsala
-# Open source scientific simulation frontend that's actually usable without feeding punchcards into your floppy drive.
+General notes for ogs-gui
+========================
+## Open source scientific simulation frontend that's actually usable without feeding punchcards into your floppy drive.
 
-# The Plan: 
+## The Plan: 
 Create GUI for opengeosys and other open source scientific computing/analysis tools that are lacking in frontends and/or standardization.
 
 ### What's working: 
@@ -17,22 +18,26 @@ Create GUI for opengeosys and other open source scientific computing/analysis to
 30.08.
 ------
  - [ ] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
- 		- On every save: `autocmd FileWritePost *.py exec [command] shellescape(@%, 1)` 
+         - Add to vim during edit:
 
-			* Use something like `embear/vimlocalvimrc` so it's persistent per project
-		- In `~/.vimrc`: 
+           ```vim
+             autocmd FileWritePost *.py exec [command] shellescape(@%, 1)
+             ``` 
 
-			```autocmd FileType python call AutoCmd_python()
-				 fun! AutoCmd_python()
-								# various python related stuff
-								nnoremap <buffer> <F9> :exec '[command]' shellescape(@%, 1)<cr>
-				 endf
-			```
+       * Use something like [embear/vimlocalvimrc](https://github.com/embear/vimlocalvimrc)  so it's persistent per project
+        - In `~/.vimrc`: 
+
+            ```autocmd FileType python call AutoCmd_python()
+                 fun! AutoCmd_python()
+                                # various python related stuff
+                                nnoremap <buffer> <F9> :exec '[command]' shellescape(@%, 1)<cr>
+                 endf
+            ```
 
       * Seems to be a good permanent solution.
-			
+            
       * Might make this filetype-agnostic or at least expand to most source files
-			  and use a makefile.
+              and use a makefile.
 
  - [ ] Clean up the god damn xml mess
  - [ ] Think about persistence (but not too much, just mark unsure areas)
@@ -51,56 +56,58 @@ Manic Feaver Dreams
  - [ ] Create *OPT-IN* data sharing for data analysis and modellation improvements using AI.
 
 
-Resources:
+### Resources:
 
-# Primary:
+Primary:
+========
 
 - OGS
-	Needs geometry (points, lines, surfaces) and mesh (meshed geometry with properties(?).
-	Has visualizer (DataExplorer) with some conversion but basically needs 
-	command line tools to work. 
-	Outputs `*.vtu` files (meshes with properties) and `*.pvd` files (contains info about timestepped meshes). 
+    Needs geometry (points, lines, surfaces) and mesh (meshed geometry with properties(?).
+    Has visualizer (DataExplorer) with some conversion but basically needs 
+    command line tools to work. 
+    Outputs `*.vtu` files (meshes with properties) and `*.pvd` files (contains info about timestepped meshes). 
 
 
 - Paraview
-	Can visualize a lot of finite element stuff. Also has libraries for python - worth checking out
+    Can visualize a lot of finite element stuff. Also has libraries for python - worth checking out
 
-# Secondary:
-
+Secondary:
+----------
 - Grass GIS
-	Geospatial data management. Might be pretty cool for advanced pipelines.
+    Geospatial data management. Might be pretty cool for advanced pipelines.
 
 - OpenFOAM
-	Open source Computational Fluid Dynamics.
-	Seems mighty powerful, the Open Source version is CLI only.
-	Need to check out what file formats are used
+    Open source Computational Fluid Dynamics.
+    Seems mighty powerful, the Open Source version is CLI only.
+    Need to check out what file formats are used
 
-- QGIS
-- GIS
-	Seems they both do the same? Definitely need to investigate.
+- QGIS, GIS
+    Seems they both do the same? Definitely need to investigate.
 
-# Honorary mentions:
+Honorary mentions:
+------------------
 
 - Elmer
-	Open source multiphysical simulation.
+    Open source multiphysical simulation.
 
 
-# Hey, at least you tried Tier:
+Hey, at least you tried Tier:
+-----------------------------
 
 - Visual-CFD
-	GUI Interface for OpenFOAM. Thought this was open source too, it very very much is not.
-	Maybe check out some screenshots and instructional videos for UX inspiration
+    GUI Interface for OpenFOAM. Thought this was open source too, it very very much is not.
+    Maybe check out some screenshots and instructional videos for UX inspiration
 
 
 - GMSH
-	Finite-element mesh-creator with GUI (gmsh.info)
-	 - Absolutely disastrous to use via GUI. Might have some interesting cli tools
+    Finite-element mesh-creator with GUI (gmsh.info)
+    Absolutely disastrous to use via GUI. Might have some interesting cli tools
 
 - GetDP
-	Finite Element Solver
-	 - Only tried in combination with GMSH, need to check out CLI tools.
-	   Though, it leans more on the script side of things and might be overkill to implement.
+    Finite Element Solver
+     - Only tried in combination with GMSH, need to check out CLI tools.
+       Though, it leans more on the script side of things and might be overkill to implement.
 
 # Onelab
-	Frontend combining GMSH and GetDP
-	 - Doesn't seem to be in active development, can be disregarded.
+    Frontend combining GMSH and GetDP
+     - Doesn't seem to be in active development, can be disregarded.
