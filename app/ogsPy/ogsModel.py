@@ -1,7 +1,7 @@
-from PyQt5.QtCore import Qt, QAbstractItemModel, QFile, QIODevice, QModelIndex, QUrl
+from PyQt5.QtCore import Qt, QAbstractItemModel, QFile, QIODevice, QModelIndex
 from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, QTreeView
 from PyQt5.QtXml import QDomDocument
-from PyQt5.QtXmlPatterns import QXmlSchema
+from PyQt5.QtXmlPatterns import QXmlSchema, QXmlSchemaValidator
 
 class OgsItem(object):
     def __init__(self, node, row, parent=None):
@@ -38,17 +38,9 @@ class OgsItem(object):
 
 class OgsModel(QAbstractItemModel):
     def __init__(self, document, parent=None):
-
-        ogsProjectSchemaUrl = 'https://www.opengeosys.org/images/xsd/OpenGeoSysProject.xsd'
-        ogsProjectSchema = QXmlSchema()
-        ogsProjectSchema.load(QUrl(ogsProjectSchemaUrl))
-
         super(OgsModel, self).__init__(parent)
-
-        projectRoot = document.namedItem('OpenGeoSysProject') or document
-
-        self.domDocument = projectRoot
-        self.rootItem = OgsItem(self.domDocument, 1)
+        self.domDocument = document
+        self.rootItem = OgsItem(self.domDocument, 0)
 
     def columnCount(self, parent):
         return 4
@@ -148,3 +140,22 @@ class OgsModel(QAbstractItemModel):
             parentItem = parent.internalPointer()
 
         return parentItem.node().childNodes().count()
+
+
+class OgsProject(OgsModel):
+    def __init__(self, document_file):
+        # Read project schema xsd file
+        schema_file = QFile('OpenGeoSysProject.xsd')
+        schema_file.open(QIODevice.ReadOnly)
+        project_schema = QXmlSchema()
+        project_schema.load(schema_file)
+
+        # Validate project against official ogs schema
+        if(project_schema.isValid()):
+          validator = QXmlSchemaValidator(project_schema)
+
+          if (validator.validate(document)):
+              super(OgsModel, self).__init__(parent)
+              project_root = document.namedItem('OpenGeoSysProject') or document
+              self.dom_document = project_root
+              self.root_item = OgsItem(self.dom_document, 0)

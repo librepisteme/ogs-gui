@@ -15,16 +15,13 @@ class MainWindow(MainWindowBase, MainWindowUI):
     MainWindowBase.__init__(self, parent)
     self.setupUi(self)
 
-    self.xmlPath = ""
+    self.projectPath = ""
     self.model = OgsModel(QDomDocument(), self)
     self.projectTree.setModel(self.model)
 
-    self.actionOpen.triggered.connect(self.showOpenFileDialog)
+    self.actionOpen.triggered.connect(self.showOpenProjectDialog)
 
-  def showOpenFileDialog(self):
-    filePath, fileType = QFileDialog.getOpenFileName(self, 'Open Project',
-        '', 'OpenGeoSys 6 Project (*.prj)')
-
+  def openProject(self, filePath):
     # Read File and parse XML
     projectFile = QFile(filePath)
 
@@ -32,10 +29,15 @@ class MainWindow(MainWindowBase, MainWindowUI):
       projectDocument = QDomDocument()
 
       if projectDocument.setContent(projectFile):
-        newModel = OgsModel(projectDocument, self)
-        self.model = newModel
-        self.projectTree.setModel(newModel)
-        self.projectTable.setModel(newModel)
-        self.xmlPath = filePath
-
+        newProject = OgsModel(projectDocument, self)
+        self.project = newProject
+        self.projectTree.setModel(newProject)
+        self.projectTable.setModel(newProject)
+        self.projectPath = filePath
       projectFile.close()
+
+  def showOpenProjectDialog(self):
+    print(self)
+    filePath, fileType = QFileDialog.getOpenFileName(self, 'Open Project',
+      '', 'OpenGeoSys 6 Project (*.prj)')
+    self.openProject(filePath)
