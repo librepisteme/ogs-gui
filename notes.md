@@ -18,25 +18,21 @@ Create GUI for opengeosys and other open source scientific computing/analysis to
 30.08.
 ------
  - [ ] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
-         - Add to vim during edit:
+   - Add to vim during at vim runtime:
+```vimrc
+autocmd FileWritePost *.py exec [command] shellescape(@%, 1)
+``` 
+   - Use something like [embear/vimlocalvimrc](https://github.com/embear/vimlocalvimrc)  so it's persistent per project
+   - In `~/.vimrc`: 
+```vimrc
+autocmd FileType python call AutoCmd_python()
 
-           ```vim
-             autocmd FileWritePost *.py exec [command] shellescape(@%, 1)
-             ``` 
-
-       * Use something like [embear/vimlocalvimrc](https://github.com/embear/vimlocalvimrc)  so it's persistent per project
-        - In `~/.vimrc`: 
-
-            ```autocmd FileType python call AutoCmd_python()
-                 fun! AutoCmd_python()
-                                # various python related stuff
-                                nnoremap <buffer> <F9> :exec '[command]' shellescape(@%, 1)<cr>
-                 endf
-            ```
-
-      * Seems to be a good permanent solution.
-            
-      * Might make this filetype-agnostic or at least expand to most source files
+fun! AutoCmd_python()
+    # various python related stuff
+    nnoremap <buffer> <F9> :exec '[command]' shellescape(@%, 1)<cr>
+endf
+```     
+   - Might make this filetype-agnostic or at least expand to most source files
               and use a makefile.
 
  - [ ] Clean up the god damn xml mess
