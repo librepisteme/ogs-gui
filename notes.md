@@ -17,18 +17,23 @@ Create GUI for opengeosys and other open source scientific computing/analysis to
 30.08.
 ------
  - [ ] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
- 		- On every save: `autocmd FileWritePost *.py exec [command] shellescape(@%, 1)`
-			- Use something like `embear/vimlocalvimrc` so it's persistent per project
+ 		- On every save: `autocmd FileWritePost *.py exec [command] shellescape(@%, 1)` 
+
+			* Use something like `embear/vimlocalvimrc` so it's persistent per project
 		- In `~/.vimrc`: 
+
 			```autocmd FileType python call AutoCmd_python()
 				 fun! AutoCmd_python()
 								# various python related stuff
 								nnoremap <buffer> <F9> :exec '[command]' shellescape(@%, 1)<cr>
 				 endf
 			```
-			- Seems to be a good permanent solution.
-			- Might make this filetype-agnostic or at least expand to most source files
+
+      * Seems to be a good permanent solution.
+			
+      * Might make this filetype-agnostic or at least expand to most source files
 			  and use a makefile.
+
  - [ ] Clean up the god damn xml mess
  - [ ] Think about persistence (but not too much, just mark unsure areas)
  - [ ] Create input fields for a few input xml tags
