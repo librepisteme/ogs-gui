@@ -9,7 +9,6 @@ from .ogsPy.ogsModel import OgsModel
 
 from . import resources_rc  # noqa
 
-
 def main():
   app = QApplication(sys.argv)
 
@@ -29,20 +28,6 @@ def main():
   app.installTranslator(translator)
 
   mw = MainWindow()
-
-  # Read File and parse XML
-  filePath = 'square.prj'
-  projectFile = QFile(filePath)
-
-  if projectFile.open(QIODevice.ReadOnly):
-    projectDocument = QDomDocument()
-    if projectDocument.setContent(projectFile):
-      newModel = OgsModel(projectDocument, mw)
-      mw.model = newModel
-      mw.projectTree.setModel(newModel)
-      mw.projectTable.setModel(newModel)
-      mw.xmlPath = filePath
-    projectFile.close()
 
   mw.show()
 

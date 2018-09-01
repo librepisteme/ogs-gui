@@ -17,7 +17,7 @@ Create GUI for opengeosys and other open source scientific computing/analysis to
 
 30.08.
 ------
- - [ ] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
+ - [x] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
          - Add to vim during edit:
 
            ```vim

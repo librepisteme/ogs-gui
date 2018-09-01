@@ -3,10 +3,9 @@ from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, QTreeView
 from PyQt5.QtXml import QDomDocument
 from PyQt5.QtXmlPatterns import QXmlSchema, QXmlSchemaValidator, QXmlQuery
 
-class OgsItem(object):
-    def __init__(self, node, row, parent=None):
+class OgsItem(QAbstractItemModel):
+    def __init__(self, node, row=0, parent=None):
         self.domNode = node
-        # Record the item's location within its parent.
         self.rowNumber = row
         self.parentItem = parent
         self.childItems = {}
@@ -51,47 +50,56 @@ class OgsModel(QAbstractItemModel):
         self.query = QXmlQuery(namePool)
 
     def columnCount(self, parent):
-        return 4
+        return 3
 
     def data(self, index, role):
         if not index.isValid():
             return None
 
-        if role != Qt.DisplayRole:
-            return None
-
         item = index.internalPointer()
 
         node = item.node()
-        attributes = []
-        attributeMap = node.attributes()
 
-        if index.column() == 0:
-            return node.nodeName()
+        name = node.nodeName()
+        value = node.nodeValue()
+        attrs = node.attributes()
+        nodeType = node.nodeType()
 
-        elif index.column() == 1:
-            # Text based
-            if node.hasChildNodes() and node.firstChild().nodeType() == 3:
-                return node.firstChild().nodeValue()
-            else:
-                value = node.nodeValue()
-                if value is None:
-                    return ''
+        # attributes = []
+        # attributeMap = node.attributes()
 
-            return ' '.join(node.nodeValue().split('\n'))
+        # Display
+        if(role == 0):
+          columns = [
+            name,
+            ('' if value is None else ' '.join(value.split('\n'))),
+            " ".join([attrs.item(i).nodeName()+'="'+attrs(i).nodeValue() + '"' for i in range(attrs.count())]),
+            nodeType
+          ]
 
+#           if index.column() == 0:
+#               return node.nodeName()
 
-        elif index.column() == 2:
-            for i in range(0, attributeMap.count()):
-                attribute = attributeMap.item(i)
-                attributes.append(attribute.nodeName() + '="' +
-                                  attribute.nodeValue() + '"')
+#           elif index.column() == 1:
+#               value = node.nodeValue()
+#               if value is None:
+#                   return ''
+#               return ' '.join(node.nodeValue().split('\n'))
 
-            return " ".join(attributes)
-        elif index.column() == 3:
-            return node.nodeType()
+#           elif index.column() == 2:
+#               for i in range(0, attributeMap.count()):
+#                   attribute = attributeMap.item(i)
+#                   attributes.append(attribute.nodeName() + '="' +
+#                                     attribute.nodeValue() + '"')
 
-        return None
+#               return " ".join(attributes)
+
+#           elif index.column() == 3:
+#               return node.nodeType()
+
+          return columns[index.column()]
+        elif(role == 2):
+          return 'bla'
 
     def flags(self, index):
         if not index.isValid():
@@ -109,9 +117,6 @@ class OgsModel(QAbstractItemModel):
 
             if section == 2:
                 return "Attributes"
-
-            if section == 3:
-                return "Type"
 
         return None
 

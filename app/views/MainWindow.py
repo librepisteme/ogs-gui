@@ -24,8 +24,11 @@ class MainWindow(MainWindowBase, MainWindowUI):
     self.actionSelectElement.triggered.connect(self.selectElement)
 
   def selectElement(self, element, **args):
-    selectedNodes = [idx.internalPointer().node() for idx in  self.projectTree.selectedIndexes()]
-    self.activeElementLabel.setText(selectedNodes[0].nodeName())
+    name, value, attributes = self.projectTree.selectedIndexes()
+    self.selectedElementName.setText(self.model.data(name, 0))
+    self.selectedElementValue.setText(self.model.data(value, 0))
+    # self.selectedElementAttributes.setText(self.model.data(value, 0))
+    print(self.model.data(attributes, 0))
 
   def openProject(self, filePath):
     # Read File and parse XML
@@ -33,12 +36,10 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
     if projectFile.open(QIODevice.ReadOnly):
       projectDocument = QDomDocument()
-
       if projectDocument.setContent(projectFile):
         newProject = OgsModel(projectDocument, self)
         self.project = newProject
         self.projectTree.setModel(newProject)
-        self.projectTable.setModel(newProject)
         self.projectPath = filePath
       projectFile.close()
 
