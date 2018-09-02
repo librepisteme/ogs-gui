@@ -15,32 +15,29 @@ Create GUI for opengeosys and other open source scientific computing/analysis to
 
  - Everything elese
 
-30.08.
+31.08.
 ------
- - [ X ] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
-         - Add to vim during edit:
+ - [x ] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
+   - Add to vim during at vim runtime:
+```vimrc
+autocmd FileWritePost *.py exec [command] shellescape(@%, 1)
+``` 
+   - Use something like [embear/vimlocalvimrc](https://github.com/embear/vimlocalvimrc)  so it's persistent per project
+   - In `~/.vimrc`: 
+```vimrc
+autocmd FileType python call AutoCmd_python()
 
-           ```vim
-             autocmd FileWritePost *.py exec [command] shellescape(@%, 1)
-             ``` 
+fun! AutoCmd_python()
+    # various python related stuff
+    nnoremap <buffer> <F9> :exec '[command]' shellescape(@%, 1)<cr>
+endf
+```     
+   - Might make this filetype-agnostic or at least expand to most source files and use a makefile.
 
-       * Use something like [embear/vimlocalvimrc](https://github.com/embear/vimlocalvimrc)  so it's persistent per project
-        - In `~/.vimrc`: 
-
-            ```autocmd FileType python call AutoCmd_python()
-                 fun! AutoCmd_python()
-                                # various python related stuff
-                                nnoremap <buffer> <F9> :exec '[command]' shellescape(@%, 1)<cr>
-                 endf
-            ```
-
-      * Seems to be a good permanent solution.
-            
-      * Might make this filetype-agnostic or at least expand to most source files
-              and use a makefile.
+01.09. - 02.09.
+______
 
 [wip] Clean up the god damn xml mess
------
 So it's difficult to create a Model from arbitrary nested XML.
 Luckily I don't actually need to do that. My options are:
  - Create a Model in python using the qt XmlStreamReader/XmlStreamWriter. Read the important parts from that and then create submodels.
@@ -56,6 +53,9 @@ So the next step is to create a simple XML Model in python, use that for the reg
 
 ### Current Task: Create ogs xml PyQt model.
 
+
+03.09. - 01.10.
+-----
  - [ ] Think about persistence (but not too much, just mark unsure areas)
  - [ ] Create input fields for a few input xml tags
  - [ ] Try to get vtk working inside the pyqt window
