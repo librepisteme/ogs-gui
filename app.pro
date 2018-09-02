@@ -1,8 +1,7 @@
 SOURCES += \
     app/__init__.py \
     app/__main__.py \
-    app/views/MainWindow.py \
-    resources/views/ogs6_project.cpp
+    app/views/MainWindow.py
 
 FORMS += \
     resources/views/MainWindow.ui \
@@ -18,5 +17,4 @@ TRANSLATIONS += \
     resources/translations/es_ES.ts \
     resources/translations/fr_FR.ts
 
-HEADERS += \
-    resources/views/ogs6_project.h
+HEADERS +=

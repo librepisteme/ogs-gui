@@ -17,7 +17,7 @@ Create GUI for opengeosys and other open source scientific computing/analysis to
 
 30.08.
 ------
- - [x] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
+ - [ X ] Find a way to automate python-qt launch on vim save and send it to certain bspc workspace
          - Add to vim during edit:
 
            ```vim
@@ -39,7 +39,23 @@ Create GUI for opengeosys and other open source scientific computing/analysis to
       * Might make this filetype-agnostic or at least expand to most source files
               and use a makefile.
 
- - [ ] Clean up the god damn xml mess
+[wip] Clean up the god damn xml mess
+-----
+So it's difficult to create a Model from arbitrary nested XML.
+Luckily I don't actually need to do that. My options are:
+ - Create a Model in python using the qt XmlStreamReader/XmlStreamWriter. Read the important parts from that and then create submodels.
+ - Create a Model in QML and then find a way to import that into python to use.
+
+Pros of using QML are the portability should I choose to create other apps entirely in QML.
+Cons are obviously adding another layer to this Cronenberg abomination of frameworks.
+
+So the next step is to create a simple XML Model in python, use that for the regular app and if I want to create a QML app later I can either: 
+ 1. Find a way to convert a PyQt model to QML
+ 2. Just rewrite the thing
+ 3. (The best one): Slap myself for wanting to do something in QML
+
+### Current Task: Create ogs xml PyQt model.
+
  - [ ] Think about persistence (but not too much, just mark unsure areas)
  - [ ] Create input fields for a few input xml tags
  - [ ] Try to get vtk working inside the pyqt window

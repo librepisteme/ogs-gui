@@ -67,7 +67,7 @@ class OgsModel(QAbstractItemModel):
 
         # attributes = []
         # attributeMap = node.attributes()
-
+        columns = [None, None, None, None]
         # Display
         if(role == 0):
           columns = [
@@ -76,30 +76,9 @@ class OgsModel(QAbstractItemModel):
             " ".join([attrs.item(i).nodeName()+'="'+attrs(i).nodeValue() + '"' for i in range(attrs.count())]),
             nodeType
           ]
-
-#           if index.column() == 0:
-#               return node.nodeName()
-
-#           elif index.column() == 1:
-#               value = node.nodeValue()
-#               if value is None:
-#                   return ''
-#               return ' '.join(node.nodeValue().split('\n'))
-
-#           elif index.column() == 2:
-#               for i in range(0, attributeMap.count()):
-#                   attribute = attributeMap.item(i)
-#                   attributes.append(attribute.nodeName() + '="' +
-#                                     attribute.nodeValue() + '"')
-
-#               return " ".join(attributes)
-
-#           elif index.column() == 3:
-#               return node.nodeType()
-
-          return columns[index.column()]
-        elif(role == 2):
-          return 'bla'
+        elif(role ==2):
+          columns = [name, value, attrs, nodeType]
+        return columns[index.column()]
 
     def flags(self, index):
         if not index.isValid():
