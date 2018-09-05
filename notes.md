@@ -34,8 +34,9 @@ endf
 ```     
    - Might make this filetype-agnostic or at least expand to most source files and use a makefile.
 
-01.09. - 02.09.
-______
+05.09.
+-----
+Try to create python bindings using SWIG
 
 [wip] Clean up the god damn xml mess
 So it's difficult to create a Model from arbitrary nested XML.

@@ -17,7 +17,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>Wurst</string>
+   <string>OpenGeoSys</string>
   </property>
   <property name="documentMode">
    <bool>true</bool>

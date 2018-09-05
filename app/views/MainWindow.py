@@ -19,8 +19,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
     self.setupUi(self)
 
     self.model = OgsModel(QDomDocument(), self)
-    self.openProject('square.prj')
-    self.projectTree.setModel(self.model)
 
     self.actionOpen.triggered.connect(self.showOpenProjectDialog)
     self.actionSelectElement.triggered.connect(self.selectElement)
@@ -51,9 +49,10 @@ class MainWindow(MainWindowBase, MainWindowUI):
       if projectDocument.setContent(projectFile):
         project = OgsModel(projectDocument, self)
         projectBase = OgsProject(projectDocument).projectBase()
+        self.project = project
 
         self.projectBase.setModel(projectBase)
-        # self.projectTree.setModel(project)
+        self.projectTree.setModel(project)
         self.projectPath = filePath
       projectFile.close()
 

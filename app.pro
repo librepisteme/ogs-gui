@@ -6,7 +6,8 @@ SOURCES += \
 FORMS += \
     resources/views/MainWindow.ui \
     resources/views/projecttree.ui \
-    resources/views/ogs_geoelement_box.ui
+    resources/views/ogs_geoelement_box.ui \
+    resources/views/mesh.ui
 
 RESOURCES += \
     resources/resources.qrc \

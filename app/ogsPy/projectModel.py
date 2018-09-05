@@ -19,7 +19,6 @@ class OgsProjectBase(QAbstractListModel):
 
 class OgsProject():
     def __init__(self, doc):
-        print(doc.toString())
         self.mesh = doc.elementsByTagName('mesh').item(0)
         self.geometry = doc.elementsByTagName('geometry').item(0)
 

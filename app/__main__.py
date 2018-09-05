@@ -30,6 +30,7 @@ def main():
   mw = MainWindow()
 
   mw.show()
+  mw.openProject('sqare.prj')
 
   sys.exit(app.exec_())
 
